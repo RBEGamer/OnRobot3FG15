@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "threefg15"
-version = "1.0.0"
+version = "1.0.1"
 description = "Python driver and CLI for the OnRobot 3FG15 gripper via Modbus TCP/RTU"
 authors = [
     { name = "Marcel Ochsendorf", email = "info@marcelochsendorf.com" }
@@ -12,6 +12,10 @@ authors = [
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.8"
+dependencies = [
+    "pymodbus>=3.0.0",
+    "typer>=0.9.0"
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",

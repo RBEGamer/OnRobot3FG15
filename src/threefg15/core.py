@@ -2,7 +2,13 @@
 from typing import Optional, List, Union
 from dataclasses import dataclass
 from enum import Enum
-from pymodbus.client.sync import ModbusTcpClient, ModbusSerialClient
+
+try:
+    # PyModbus >= 3.0.0
+    from pymodbus.client import ModbusTcpClient, ModbusSerialClient
+except ImportError:
+    # Fallback for PyModbus < 3.0.0
+    from pymodbus.client.sync import ModbusTcpClient, ModbusSerialClient
 
 
 @dataclass
