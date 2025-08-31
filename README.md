@@ -127,5 +127,6 @@ The cli application offers the following commands:
 ## License
 
 This software is released under the MIT License, see [LICENSE](./LICENSE).
+
 ---
 
