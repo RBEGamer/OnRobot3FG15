@@ -116,7 +116,7 @@ The cli application offers the following commands:
 * open [force], close [force], move <diam_mm> [force]
 * griptype <external|internal>
 * stop
-* flex <diam_mm> [force] flexopen [force], flexclose [force]
+* flex <diam_mm> [force], flexopen [force], flexclose [force]
 * limits, force
 * status, detect
 
