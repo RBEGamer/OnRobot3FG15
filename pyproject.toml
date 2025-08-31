@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "threefg15"
-version = "0.1.0"
+version = "1.0.0"
 description = "Python driver and CLI for the OnRobot 3FG15 gripper via Modbus TCP/RTU"
 authors = [
     { name = "Marcel Ochsendorf", email = "info@marcelochsendorf.com" }
