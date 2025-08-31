@@ -6,8 +6,6 @@
 This package provides a Python driver and command-line interface (CLI) for controlling the [OnRobot 3FG15](https://onrobot.com/en/products/3fg15) gripper. It supports communication over Modbus TCP and RTU protocols, enabling precise control over the gripper's 3-finger parallel mechanism, including external and internal gripping modes. The package also supports object detection features integrated into the gripper.
 
 
-- 
-
 ## Package Features
 
 - Python driver for [OnRobot 3FG15](https://onrobot.com/en/products/3fg15) gripper
