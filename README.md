@@ -124,10 +124,6 @@ The cli application offers the following commands:
 
 
 
-## Author / Contributor
-
-[Marce Ochsendorf](https://marcelochsendorf.com)
-
 ## License
 
 This software is released under the MIT License, see [LICENSE](./LICENSE).
