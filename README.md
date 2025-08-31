@@ -1,6 +1,8 @@
 # OnRobot 3FG15 Gripper Python Package
 
 [![Build and Test](https://github.com/RBEGamer/OnRobot3FG15/actions/workflows/main.yml/badge.svg)](https://github.com/RBEGamer/OnRobot3FG15/actions/workflows/main.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![repo size](https://img.shields.io/github/repo-size/RBEGamer/OnRobot3FG15)
 
 ## Overview
 
@@ -120,5 +122,14 @@ The cli application offers the following commands:
 * limits, force
 * status, detect
 
+
+
+## Author / Contributor
+
+[Marce Ochsendorf](https://marcelochsendorf.com)
+
+## License
+
+This software is released under the MIT License, see [LICENSE](./LICENSE).
 ---
 
