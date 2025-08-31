@@ -99,6 +99,7 @@ The CLI provides two subcommands for communication modes:
 - `rtu`: Use Modbus RTU over serial
 - `tcp`: Use Modbus TCP over Ethernet
 
+If only the cli is interested, just use `PipX`: `$ pipx upgrade threefg15`
 #### RTU Usage Example
 
 ```bash
