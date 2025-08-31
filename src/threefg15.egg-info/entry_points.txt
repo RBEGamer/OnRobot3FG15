@@ -1,0 +1,2 @@
+[console_scripts]
+threefg15-cli = threefg15.cli:app
