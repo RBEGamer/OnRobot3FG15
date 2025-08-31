@@ -48,7 +48,12 @@ Pin connections for the gripper electrical interface (female M8x8 connector):
 Install the package using pip:
 
 ```bash
-pip install -e .
+$ pip install threefg15
+
+# or for local development/usage
+$ git clone https://github.com/RBEGamer/OnRobot3FG15
+$ cd OnRobot3FG15
+$ pip install -e .
 ```
 
 ## Usage
