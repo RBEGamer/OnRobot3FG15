@@ -1,5 +1,6 @@
 # OnRobot 3FG15 Gripper Python Package
 
+[![Build and Test](https://github.com/RBEGamer/OnRobot3FG15/actions/workflows/main.yml/badge.svg)](https://github.com/RBEGamer/OnRobot3FG15/actions/workflows/main.yml)
 
 ## Overview
 
