@@ -99,8 +99,22 @@ The CLI provides two subcommands for communication modes:
 - `rtu`: Use Modbus RTU over serial
 - `tcp`: Use Modbus TCP over Ethernet
 
-If only the cli is interested, just use `PipX`: `$ pipx upgrade threefg15`
-#### RTU Usage Example
+#### CLI installation only
+
+##### PipX
+```bash
+$ pipx upgrade threefg15
+```
+
+##### Docker
+```bash
+$ docker build -t threefg15 .
+$ docker run --rm threefg15
+$ docker run --rm --device=/dev/ttyUSB0 threefg15 #PASS USB<->MODBUS BRIDGE
+```
+
+
+#### Usage Example
 
 ```bash
 threefg15-cli rtu --serial-port /dev/ttyUSB0

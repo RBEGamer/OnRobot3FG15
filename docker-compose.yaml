@@ -1,0 +1,25 @@
+services:
+  threefg15rtu:
+    build: .
+    image: threefg15:latest
+    container_name: threefg15
+    stdin_open: true
+    tty: true
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"   # Map RTU device into container
+    environment:
+      - MODE=rtu
+      - SERIAL_PORT=/dev/ttyUSB0
+    entrypoint: ["threefg15-cli"]
+
+  threefg15tcp:
+    build: .
+    image: threefg15:latest
+    container_name: threefg15
+    stdin_open: true
+    tty: true
+    environment:
+      - MODE=tcp
+      - IP=192.168.1.10
+      - PORT=502
+    entrypoint: ["threefg15-cli"]

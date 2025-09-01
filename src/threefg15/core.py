@@ -100,8 +100,8 @@ class ThreeFG15:
             if not serial_port:
                 raise ValueError("Serial port required for RTU mode")
             self.client = ModbusSerialClient(
-                method="rtu",
                 port=serial_port,
+                framer="rtu",
                 baudrate=1000000,
                 stopbits=1,
                 bytesize=8,
@@ -144,7 +144,7 @@ class ThreeFG15:
         """
         if self.client is None:
             raise RuntimeError("Modbus client not initialized")
-        result = self.client.write_register(reg, value, unit=self.slave_addr)
+        result = self.client.write_register(reg, value, device_id=self.slave_addr)
         if result.isError():
             raise RuntimeError(f"Failed to write register {reg} with value {value}")
 
@@ -161,7 +161,7 @@ class ThreeFG15:
         """
         if self.client is None:
             raise RuntimeError("Modbus client not initialized")
-        result = self.client.write_registers(start_reg, values, unit=self.slave_addr)
+        result = self.client.write_registers(start_reg, values, device_id=self.slave_addr)
         if result.isError():
             raise RuntimeError(f"Failed to write registers starting at {start_reg} with values {values}")
 
@@ -181,7 +181,7 @@ class ThreeFG15:
         """
         if self.client is None:
             raise RuntimeError("Modbus client not initialized")
-        result = self.client.read_holding_registers(reg, count, unit=self.slave_addr)
+        result = self.client.read_holding_registers(reg, count=count, device_id=self.slave_addr)
         if result.isError() or not hasattr(result, 'registers'):
             raise RuntimeError(f"Failed to read {count} registers starting at {reg}")
         return result.registers
