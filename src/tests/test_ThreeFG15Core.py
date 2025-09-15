@@ -1,5 +1,5 @@
 import pytest
-from threefg15.core import ThreeFG15Status, GripType, ThreeFG15
+from threefg15.ThreeFG15 import ThreeFG15Status, GripType, ThreeFG15Simulator
 
 
 # ---------- Status parsing tests ----------
@@ -36,7 +36,7 @@ def test_set_grip_type_calls_register_write(monkeypatch):
         calls["reg"] = reg
         calls["value"] = value
 
-    gripper = ThreeFG15(mode="tcp", ip="127.0.0.1")
+    gripper = ThreeFG15Simulator()
     gripper.client = True
     gripper.write_register = fake_write_register
 
@@ -47,7 +47,7 @@ def test_set_grip_type_calls_register_write(monkeypatch):
 
 
 def test_detect_object(monkeypatch):
-    gripper = ThreeFG15(mode="tcp", ip="127.0.0.1")
+    gripper = ThreeFG15Simulator()
 
     gripper.get_status = lambda: ThreeFG15Status(
         busy=False, grip_detected=True, force_grip_detected=False, calibration_ok=True
@@ -69,7 +69,7 @@ def test_open_gripper(monkeypatch):
     def fake_write_register(reg, value):
         calls.setdefault("writes", []).append((reg, value))
 
-    gripper = ThreeFG15(mode="tcp", ip="127.0.0.1")
+    gripper = ThreeFG15Simulator()
     gripper.read_registers = fake_read_registers
     gripper.write_register = fake_write_register
 
@@ -91,7 +91,7 @@ def test_close_gripper(monkeypatch):
     def fake_write_register(reg, value):
         calls.setdefault("writes", []).append((reg, value))
 
-    gripper = ThreeFG15(mode="tcp", ip="127.0.0.1")
+    gripper = ThreeFG15Simulator()
     gripper.read_registers = fake_read_registers
     gripper.write_register = fake_write_register
 
@@ -109,7 +109,7 @@ def test_flex_grip(monkeypatch):
     def fake_write_register(reg, value):
         calls.setdefault("writes", []).append((reg, value))
 
-    gripper = ThreeFG15(mode="tcp", ip="127.0.0.1")
+    gripper = ThreeFG15Simulator()
     gripper.write_register = fake_write_register
 
     gripper.flex_grip(diameter=500, force_val=200, grip_type=GripType.EXTERNAL)

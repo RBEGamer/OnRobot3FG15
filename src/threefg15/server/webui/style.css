@@ -1,0 +1,13 @@
+body { font-family: system-ui, Arial, sans-serif; margin: 0; background: #0f172a; color: #e2e8f0; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 24px; }
+h1 { margin-top: 0; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+section { background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 16px; }
+.row { display: flex; gap: 12px; align-items: center; margin: 8px 0; flex-wrap: wrap; }
+button { background: #2563eb; color: white; border: 0; border-radius: 6px; padding: 8px 12px; cursor: pointer; }
+button:hover { background: #1d4ed8; }
+input, select { background: #0b1220; color: #e2e8f0; border: 1px solid #374151; border-radius: 6px; padding: 6px 8px; }
+#status div { margin: 4px 0; }
+#msg { margin-top: 12px; min-height: 1.5em; color: #f59e0b; }
+@media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+

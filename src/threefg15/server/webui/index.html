@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>3FG15 Gripper Control</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>3FG15 Gripper Control</h1>
+      <div class="grid">
+        <section>
+          <h2>Commands</h2>
+          <div class="row">
+            <button id="btnOpen">Open</button>
+            <button id="btnClose">Close</button>
+            <button id="btnMove">Move</button>
+            <button id="btnFlex">Flex</button>
+            <button id="btnStop">Stop</button>
+          </div>
+          <div class="row">
+            <label>Force (0-1000)
+              <input type="number" id="force" min="0" max="1000" value="600" />
+            </label>
+            <button id="btnSetForce">Set Force</button>
+          </div>
+          <div class="row">
+            <label>Diameter (0.1mm)
+              <input type="number" id="diam" min="0" max="10000" value="150" />
+            </label>
+            <button id="btnSetDiam">Set Diameter</button>
+          </div>
+          <div class="row">
+            <label>Grip Type
+              <select id="grip">
+                <option value="0">External (0)</option>
+                <option value="1">Internal (1)</option>
+              </select>
+            </label>
+            <button id="btnSetGrip">Set Grip</button>
+          </div>
+        </section>
+        <section>
+          <h2>Status</h2>
+          <div id="status">
+            <div>Ready: <span id="s-ready">?</span></div>
+            <div>Open: <span id="s-open">?</span></div>
+            <div>Closed: <span id="s-closed">?</span></div>
+            <div>Gripped: <span id="s-gripped">?</span></div>
+            <div>Width (0.1mm): <span id="s-width">?</span></div>
+            <div>Force: <span id="s-force">?</span></div>
+            <div>Diameter (0.1mm): <span id="s-diam">?</span></div>
+            <div>Grip Type: <span id="s-gt">?</span></div>
+          </div>
+        </section>
+      </div>
+      <div id="msg"></div>
+    </div>
+    <script src="/static/app.js"></script>
+  </body>
+  </html>
+

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: threefg15
-Version: 1.0.0
+Version: 1.0.2
 Summary: Python driver and CLI for the OnRobot 3FG15 gripper via Modbus TCP/RTU
 Author-email: Marcel Ochsendorf <info@marcelochsendorf.com>
 License: MIT
@@ -10,13 +10,16 @@ Classifier: Operating System :: OS Independent
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 License-File: LICENSE
-Requires-Dist: pymodbus>=3.0.0
-Requires-Dist: typer>=0.9.0
+Requires-Dist: pymodbus~=3.0.0
+Requires-Dist: typer~=0.9.0
+Requires-Dist: pyserial~=3.5.0
 Dynamic: license-file
 
 # OnRobot 3FG15 Gripper Python Package
 
 [![Build and Test](https://github.com/RBEGamer/OnRobot3FG15/actions/workflows/main.yml/badge.svg)](https://github.com/RBEGamer/OnRobot3FG15/actions/workflows/main.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![repo size](https://img.shields.io/github/repo-size/RBEGamer/OnRobot3FG15)
 
 ## Overview
 
@@ -113,7 +116,22 @@ The CLI provides two subcommands for communication modes:
 - `rtu`: Use Modbus RTU over serial
 - `tcp`: Use Modbus TCP over Ethernet
 
-#### RTU Usage Example
+#### CLI installation only
+
+##### PipX
+```bash
+$ pipx upgrade threefg15
+```
+
+##### Docker
+```bash
+$ docker build -t threefg15 .
+$ docker run --rm threefg15
+$ docker run --rm --device=/dev/ttyUSB0 threefg15 #PASS USB<->MODBUS BRIDGE
+```
+
+
+#### Usage Example
 
 ```bash
 threefg15-cli rtu --serial-port /dev/ttyUSB0
@@ -135,6 +153,12 @@ The cli application offers the following commands:
 * flex <diam_mm> [force], flexopen [force], flexclose [force]
 * limits, force
 * status, detect
+
+
+
+## License
+
+This software is released under the MIT License, see [LICENSE](./LICENSE).
 
 ---
 

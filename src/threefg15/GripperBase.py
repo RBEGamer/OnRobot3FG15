@@ -1,69 +1,27 @@
-#!/usr/bin/env python3
-from typing import Optional, List, Union
-from dataclasses import dataclass
+from abc import ABC, abstractmethod
 from enum import Enum
+from typing import List, Optional
 
+# Handle both package import and direct execution
 try:
-    # PyModbus >= 3.0.0
-    from pymodbus.client import ModbusTcpClient, ModbusSerialClient
+    # When imported as a package
+    from .status import ThreeFG15Status
 except ImportError:
-    # Fallback for PyModbus < 3.0.0
-    from pymodbus.client.sync import ModbusTcpClient, ModbusSerialClient
-
-
-@dataclass
-class ThreeFG15Status:
-    """
-    Data class representing the status bits of the 3FG15 gripper.
-    """
-    busy: bool
-    grip_detected: bool
-    force_grip_detected: bool
-    calibration_ok: bool
-
-    @classmethod
-    def from_register(cls, reg_value: int) -> "ThreeFG15Status":
-        """
-        Create a ThreeFG15Status instance from a 16-bit register value.
-
-        Args:
-            reg_value (int): 16-bit integer status register.
-
-        Returns:
-            ThreeFG15Status: Parsed status object.
-        """
-        status = format(reg_value, '016b')
-        return cls(
-            busy=bool(int(status[-1])),
-            grip_detected=bool(int(status[-2])),
-            force_grip_detected=bool(int(status[-3])),
-            calibration_ok=bool(int(status[-4]))
-        )
-
+    # When run directly as a script
+    from status import ThreeFG15Status
 
 class GripType(Enum):
     EXTERNAL = 0
     INTERNAL = 1
 
-
-class ThreeFG15:
+class GripperBase(ABC):
     """
-    OnRobot 3FG15 Modbus interface (TCP or RTU).
-
-    Provides methods to control and monitor the 3FG15 gripper via Modbus TCP or RTU.
-
-    Args:
-        mode (str): "tcp" or "rtu" to select communication mode.
-        ip (Optional[str]): IP address for TCP mode.
-        port (int): TCP port number (default 502).
-        serial_port (Optional[str]): Serial port name for RTU mode.
-        slave_addr (int): Modbus slave address (default 65).
-        timeout (float): Communication timeout in seconds (default 1).
-
-    Raises:
-        ValueError: If required parameters for selected mode are missing.
+    Abstract base class for gripper implementations.
+    
+    This class defines the interface that all gripper implementations must follow,
+    whether they are real hardware, simulators, or other implementations.
     """
-
+    
     # Register map (from Connectivity Guide v1.20)
     REG_TARGET_FORCE      = 0     # write, 0–1000 (% of max force)
     REG_TARGET_DIAMETER   = 1     # write, 0.1 mm units
@@ -85,111 +43,35 @@ class ThreeFG15:
     CMD_STOP              = 4
     CMD_FLEXIBLE_GRIP     = 5
 
-    def __init__(self, mode: str = "tcp", ip: Optional[str] = None, port: int = 502,
-                 serial_port: Optional[str] = None, slave_addr: int = 65, timeout: float = 1.0) -> None:
-        self.mode = mode
-        self.slave_addr = slave_addr
-        self.client: Optional[Union[ModbusTcpClient, ModbusSerialClient]] = None
-
-        if mode == "tcp":
-            if not ip:
-                raise ValueError("IP address required for TCP mode")
-            self.client = ModbusTcpClient(ip, port=port, timeout=timeout)
-
-        elif mode == "rtu":
-            if not serial_port:
-                raise ValueError("Serial port required for RTU mode")
-            self.client = ModbusSerialClient(
-                port=serial_port,
-                framer="rtu",
-                baudrate=1000000,
-                stopbits=1,
-                bytesize=8,
-                parity='E',
-                timeout=timeout
-            )
-        else:
-            raise ValueError("Mode must be 'tcp' or 'rtu'")
-
+    @abstractmethod
     def open_connection(self) -> bool:
-        """
-        Open connection to the Modbus client.
+        """Open connection to the gripper."""
+        pass
 
-        Returns:
-            bool: True if connection was successful, False otherwise.
-        """
-        if self.client is None:
-            raise RuntimeError("Modbus client not initialized")
-        return self.client.connect()
-
+    @abstractmethod
     def close_connection(self) -> None:
-        """
-        Close the Modbus client connection.
-        """
-        if self.client is None:
-            raise RuntimeError("Modbus client not initialized")
-        self.client.close()
+        """Close the gripper connection."""
+        pass
 
-    # ------------------ Low-level access ------------------
+    @abstractmethod
     def write_register(self, reg: int, value: int) -> None:
-        """
-        Write a single register.
+        """Write a single register."""
+        pass
 
-        Args:
-            reg (int): Register address.
-            value (int): Value to write.
-
-        Raises:
-            RuntimeError: If write operation fails.
-        """
-        if self.client is None:
-            raise RuntimeError("Modbus client not initialized")
-        result = self.client.write_register(reg, value, device_id=self.slave_addr)
-        if result.isError():
-            raise RuntimeError(f"Failed to write register {reg} with value {value}")
-
+    @abstractmethod
     def write_registers(self, start_reg: int, values: List[int]) -> None:
-        """
-        Write multiple registers starting at start_reg.
+        """Write multiple registers starting at start_reg."""
+        pass
 
-        Args:
-            start_reg (int): Starting register address.
-            values (List[int]): List of values to write.
-
-        Raises:
-            RuntimeError: If write operation fails.
-        """
-        if self.client is None:
-            raise RuntimeError("Modbus client not initialized")
-        result = self.client.write_registers(start_reg, values, device_id=self.slave_addr)
-        if result.isError():
-            raise RuntimeError(f"Failed to write registers starting at {start_reg} with values {values}")
-
+    @abstractmethod
     def read_registers(self, reg: int, count: int = 1) -> List[int]:
-        """
-        Read holding registers.
+        """Read holding registers."""
+        pass
 
-        Args:
-            reg (int): Starting register address.
-            count (int): Number of registers to read.
-
-        Returns:
-            List[int]: List of register values.
-
-        Raises:
-            RuntimeError: If read operation fails.
-        """
-        if self.client is None:
-            raise RuntimeError("Modbus client not initialized")
-        result = self.client.read_holding_registers(reg, count=count, device_id=self.slave_addr)
-        if result.isError() or not hasattr(result, 'registers'):
-            raise RuntimeError(f"Failed to read {count} registers starting at {reg}")
-        return result.registers
-
-    # ------------------ High-level commands ------------------
+    # High-level commands with default implementations
     def set_target_force(self, force_val: int) -> None:
         """
-        Set grip force (0–1000 = 0–100%).
+        Set grip force (0-1000 = 0-100%).
 
         Args:
             force_val (int): Force value to set.
@@ -277,7 +159,7 @@ class ThreeFG15:
         except RuntimeError:
             return None
 
-    # ------------------ Convenience methods ------------------
+    # Convenience methods with default implementations
     def open_gripper(self, force_val: int = 500) -> None:
         """
         Open gripper fully with given force (default 50%).
@@ -353,43 +235,3 @@ class ThreeFG15:
         if status is None:
             return False
         return status.grip_detected or status.force_grip_detected
-
-
-
-class ThreeFG15TCP(ThreeFG15):
-    def __init__(self, ip: str, port: int = 502, timeout: float = 1.0) -> None:
-        super().__init__(mode="tcp", ip=ip, port=port, timeout=timeout)
-    
-    
-class ThreeFG15RTU(ThreeFG15):
-    def __init__(self, serial_port: str, timeout: float = 1.0) -> None:
-        super().__init__(mode="rtu", serial_port=serial_port, timeout=timeout)
-
-
-
-if __name__ == "__main__":
-    # --- Example 1: TCP (Ethernet) ---
-    #gripper = ThreeFG15(mode="tcp", ip="192.168.178.22", port=5020)
-    
-    # --- Example 2: RTU (USB/serial RS485) ---
-    gripper = ThreeFG15(mode="rtu", serial_port="/dev/tty.usbserial-A5052NB6")
-
-    if gripper.open_connection():
-        print("Connected to gripper")
-
-        # Open gripper
-        gripper.open_gripper(force_val=500)
-
-        # Wait a bit (robot program usually checks busy flag)
-        import time; time.sleep(2)
-
-        # Close gripper
-        gripper.close_gripper(force_val=700)
-
-        # Check status
-        status = gripper.get_status()
-        print("Status:", status)
-
-        gripper.close_connection()
-    else:
-        print("Failed to connect")

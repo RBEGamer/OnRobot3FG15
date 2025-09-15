@@ -2,7 +2,7 @@
 __pycache__/
 *.py[codz]
 *$py.class
-
+*.egg-info/  
 # C extensions
 *.so
 

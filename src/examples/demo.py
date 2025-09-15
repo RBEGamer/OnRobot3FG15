@@ -1,4 +1,4 @@
-from threefg15.core import ThreeFG15RTU, ThreeFG15TCP, ThreeFG15Status
+from threefg15.ThreeFG15 import ThreeFG15ModbusRTU, ThreeFG15ModbusTCP, ThreeFG15Status
 import time
 
 
@@ -16,10 +16,10 @@ def main() -> None:
 
     # --- Choose connection mode ---
     # RTU (USB/serial)
-    gripper = ThreeFG15RTU(serial_port="/dev/tty.usbserial-A5052NB6")
+    gripper = ThreeFG15ModbusRTU(serial_port="/dev/tty.usbserial-A5052NB6")
 
     # TCP (Ethernet) -> uncomment to use
-    # gripper = ThreeFG15TCP(ip="192.168.1.10", port=502)
+    # gripper = ThreeFG15ModbusTCP(ip="192.168.1.10", port=502)
 
     if not gripper.open_connection():
         print("Failed to connect to gripper")

@@ -71,11 +71,12 @@ from threefg15.core import ThreeFG15
 For further examples and minimal demo code, refer to the `src/examples` folder.
 
 ```python
-from threefg15.core import ThreeFG15RTU, ThreeFG15TCP, GripType, ThreeFG15Status
+from threefg15.ThreeFG15 import ThreeFG15ModbusRTU, ThreeFG15ModbusTCP, ThreeFG15Status
+
 
 # Initialize gripper with Modbus TCP or RTU connection
-gripper = ThreeFG15TCP(ip_address="192.168.0.10", port=502)
-gripper = ThreeFG15RTU(serial_port="/dev/tty.usbserial-A5052NB6")
+gripper = ThreeFG15ModbusTCP(ip_address="192.168.0.10", port=502)
+gripper = ThreeFG15ModbusRTU(serial_port="/dev/tty.usbserial-A5052NB6")
 # Open the gripper
 gripper.open()
 # Gripper opened to: 143.0 mm

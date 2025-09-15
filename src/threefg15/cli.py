@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import time
 import typer
-from threefg15.core import ThreeFG15RTU, ThreeFG15TCP, GripType, ThreeFG15Status
+from threefg15 import ThreeFG15Simulator
+from threefg15.ThreeFG15 import ThreeFG15ModbusRTU, ThreeFG15ModbusTCP, GripType, ThreeFG15Status
+from threefg15.server import run_gripper_server
 
 app = typer.Typer(add_completion=False)
 
@@ -139,7 +141,7 @@ def rtu(
     timeout: float = typer.Option(1.0, help="Communication timeout in seconds"),
 ):
     """Connect to gripper via RTU (USB/serial)."""
-    gripper = ThreeFG15RTU(serial_port=serial_port, timeout=timeout)
+    gripper = ThreeFG15ModbusRTU(serial_port=serial_port, timeout=timeout)
     if not gripper.open_connection():
         print("Failed to connect to gripper (RTU)")
         raise typer.Exit(code=1)
@@ -153,12 +155,39 @@ def tcp(
     timeout: float = typer.Option(1.0, help="Communication timeout in seconds"),
 ):
     """Connect to gripper via TCP (Ethernet)."""
-    gripper = ThreeFG15TCP(ip=ip, port=port, timeout=timeout)
+    gripper = ThreeFG15ModbusTCP(ip=ip, port=port, timeout=timeout)
     if not gripper.open_connection():
         print("Failed to connect to gripper (TCP)")
         raise typer.Exit(code=1)
     interactive_loop(gripper)
 
+
+
+
+
+
+@app.command()
+def server(
+    listen: str = typer.Option("0.0.0.0", help="Listen address"),
+    port: int = typer.Option(5020, help="Port for Modbus TCP server"),
+    mode: str = typer.Option("rtu", help="Gripper connection mode: rtu tcp sim"),
+    serial_port: str = typer.Option("/dev/tty.usbserial-A5052NB6", help="Serial port for RTU"),
+    ip: str = typer.Option("192.168.1.10", help="Gripper IP for TCP mode"),
+    gripper_port: int = typer.Option(502, help="Gripper TCP port"),
+):
+    """Expose the gripper as a Modbus TCP server with simple register map."""
+    if mode == "tcp":
+        gripper = ThreeFG15ModbusTCP(ip=ip, port=gripper_port)
+    elif mode == "rtu":
+        gripper = ThreeFG15ModbusRTU(serial_port=serial_port)
+    elif mode == "sim":
+        gripper = ThreeFG15Simulator()
+
+    if not gripper.open_connection():
+        print("Failed to connect to gripper")
+        raise typer.Exit(code=1)
+
+    run_gripper_server(gripper, listen=listen, port=port)
 
 if __name__ == "__main__":
     app()

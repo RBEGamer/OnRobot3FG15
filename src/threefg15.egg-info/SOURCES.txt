@@ -4,6 +4,7 @@ pyproject.toml
 src/threefg15/__init__.py
 src/threefg15/cli.py
 src/threefg15/core.py
+src/threefg15/server.py
 src/threefg15.egg-info/PKG-INFO
 src/threefg15.egg-info/SOURCES.txt
 src/threefg15.egg-info/dependency_links.txt

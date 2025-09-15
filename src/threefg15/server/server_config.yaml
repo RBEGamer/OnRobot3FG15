@@ -1,0 +1,24 @@
+server:
+  host: 127.0.0.1
+  port: 15020
+connection:
+  mode: rtu
+  serial_port: /dev/tty.usbserial-A5052NB6
+  slave_addr: 65
+  ip: null
+  gripper_port: 502
+mapping:
+  open_coil: 0
+  close_coil: -1
+  move_coil: -1
+  flex_coil: -1
+  stop_coil: -1
+  status_coil: 2
+  status_open_coil: 3
+  status_closed_coil: 4
+  status_grip_coil: 5
+  hr_force_index: 0
+  hr_diameter_index: 1
+  hr_griptype_index: 2
+  hr_cmd_index: 3
+  ir_width_index: 0
